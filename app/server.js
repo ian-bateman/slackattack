@@ -61,7 +61,7 @@ controller.hears(['hello', 'hi', 'howdy', 'hey', 'hola', 'yo', 'sup'], ['direct_
 // help response
 controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.reply(message, 'Here is what I can do:');
-  bot.reply(message, '-- Respond to Hi, Hello, Howdy, Hey, or Hola');
+  bot.reply(message, '-- Respond to Hi, Hello, Howdy, Hey, Hola, Yo, or Sup');
   bot.reply(message, '-- Respond to your nonsense with a sassy remark');
   bot.reply(message, '-- Help you find a good local restaurant if you tell me you are `hungry`');
   bot.reply(message, '-- Be woken up with `bot wake up!`');
