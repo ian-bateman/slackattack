@@ -48,7 +48,7 @@ controller.on('outgoing_webhook', (bot, message) => {
 });
 
 // hello response
-controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+controller.hears(['hello', 'hi', 'howdy', 'hey', 'hola'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.api.users.info({ user: message.user }, (err, res) => {
     if (res) {
       bot.reply(message, `Hey, ${res.user.name}!`);
@@ -56,6 +56,16 @@ controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_men
       bot.reply(message, 'Hello there!');
     }
   });
+});
+
+// help response
+controller.hears(['help'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'Here is what I can do:');
+  bot.reply(message, '-- Respond to Hi, Hello, Howdy, Hey, or Hola');
+  bot.reply(message, '-- Respond to your nonsense with a sassy remark');
+  bot.reply(message, '-- Help you find a good local restaurant if you tell me you are `hungry`');
+  bot.reply(message, '-- Be woken up with `bot wake up!`');
+  bot.reply(message, 'That is about it!');
 });
 
 const giveResults = (response, convo, place, type) => {
