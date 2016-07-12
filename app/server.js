@@ -152,3 +152,7 @@ controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (b
     ]);
   });
 });
+
+controller.hears(['.*'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
+  bot.reply(message, 'You are coming in all broken up, can you say that again?');
+});
