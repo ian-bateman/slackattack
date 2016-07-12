@@ -42,103 +42,21 @@ controller.setupWebserver(process.env.PORT || 3001, (err, webserver) => {
   });
 });
 
-// example hello response
+// outgoing webhook
+controller.on('outgoing_webhook', (bot, message) => {
+  bot.replyPublic(message, 'yeah yeah');
+});
+
+// hello response
 controller.hears(['hello', 'hi', 'howdy', 'hey'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
   bot.api.users.info({ user: message.user }, (err, res) => {
     if (res) {
-      bot.reply(message, `Hello, ${res.user.name}!`);
+      bot.reply(message, `Hey, ${res.user.name}!`);
     } else {
       bot.reply(message, 'Hello there!');
     }
   });
 });
-
-
-// controller.hears([' '], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
-//   bot.reply(message, 'Hello there!');
-// });
-
-// hungry conversation flow
-// controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], function(bot, message) => {
-//
-//   bot.reply(message, 'Would you like food recommendations near you?');
-//
-//
-// });
-
-
-// const askWhereDeliver = (response, convo) => {
-//   convo.ask('So where do you want it delivered?', (reply, conversation) => {
-//     convo.say('Ok! Goodbye.');
-//     convo.next();
-//   });
-// };
-// const askSize = (response, convo) => {
-//   convo.ask('What size do you want?', (reply, conversation) => {
-//     convo.say('Ok.');
-//     askWhereDeliver(response, convo);
-//     convo.next();
-//   });
-// };
-// const askRecommend = (response, convo) => {
-//   convo.ask('Would you like food recommendations near you?',[
-//     {
-//       pattern: 'done',
-//       callback: (response,convo) => {
-//         convo.say('OK you are done!');
-//         convo.next();
-//       },
-//     },
-//     {
-//       pattern: bot.utterances.yes,
-//       callback: (response,convo) => {
-//         convo.say('Great! I will continue...');
-//         // do something else...
-//         convo.next();
-//       }
-//     },
-//     {
-//       pattern: bot.utterances.no,
-//       callback: (response,convo) => {
-//         convo.say('Perhaps later.');
-//         // do something else...
-//         convo.next();
-//       },
-//     },
-//     {
-//       default: true,
-//       callback: function(response,convo) {
-//         // just repeat the question
-//         convo.repeat();
-//         convo.next();
-//       }
-//     }
-//   ]);
-
-  // , (reply, conversation) => {
-  //
-  //
-  //
-  //   convo.say('Awesome.');
-  //   askSize(response, convo);
-  //   convo.next();
-  // });
-// };
-
-
-// controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
-//   bot.startConversation(message, askRecommend);
-// });
-
-
-// controller.on('user_typing', (bot, message) => {
-//   bot.reply(message, 'stop typing!');
-// });
-
-// controller.on('user_typing', (bot, message) => {
-//   bot.reply(message, 'stop typing!');
-// });
-
 
 const giveResults = (response, convo, place, type) => {
   convo.say('Ok! One sec. Pulling up results.');
@@ -195,9 +113,7 @@ const askType = (response, convo) => {
   });
 };
 
-
 controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (bot, message) => {
-  // start a conversation to handle this response.
   bot.startConversation(message, (err, convo) => {
     convo.ask('Would you like food recommendations near you?', [
       {
@@ -211,7 +127,6 @@ controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (b
         pattern: bot.utterances.yes,
         callback: (response, conversation) => {
           convo.say('Great!');
-          // do something else...
           askType(response, convo);
           convo.next();
         },
@@ -219,7 +134,6 @@ controller.hears(['hungry'], ['direct_message', 'direct_mention', 'mention'], (b
       {
         default: true,
         callback: (response, conversation) => {
-          // just repeat the question
           convo.say('I did not understand that');
           convo.repeat();
           convo.next();
